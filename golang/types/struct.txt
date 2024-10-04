@@ -1,0 +1,7 @@
+
+1. Since an empty struct has no fields, it doesn't need any memory to store anything. It's essentially a marker or placeholder in Go.
+
+2. structs are depends on the order of fields because of field that u have:
+| A (1 byte) | padding (7 bytes) | B (8 bytes) | C (1 byte) | padding (7 bytes) |
+
+3. Go associates the method with the type of the struct, but it doesn’t add anything to the struct’s memory layout. it stores methods in the method set of the struct's type.' table.
