@@ -1,4 +1,5 @@
 // panic: negative counter
+
 func main() {
 	wg := &sync.WaitGroup{}
 
@@ -8,6 +9,7 @@ func main() {
 }
 
 // undefined behaviour (panic negative or just just leave the program)
+
 func main() {
 	wg := &sync.WaitGroup{}
 
@@ -21,6 +23,7 @@ func operate(wg sync.WaitGroup) {
 }
 
 // deadlock
+
 func main() {
 	wg := &sync.WaitGroup{}
 
@@ -37,6 +40,7 @@ func operate(wg sync.WaitGroup) {
 }
 
 // will be executed and deadlock at the end
+
 func main() {
 	ch := make(chan int, 10)
 
@@ -51,6 +55,7 @@ func main() {
 }
 
 // 10 and deadlock
+
 func main() {
 	ch := make(chan int)
 
@@ -62,6 +67,7 @@ func main() {
 }
 
 // compiling error because of the i in loop
+
 func main() {
 	ch := make(chan int)
 
@@ -73,6 +79,7 @@ func main() {
 }
 
 // ok
+
 func main() {
 	ch := make(chan int)
 
@@ -90,6 +97,7 @@ func main() {
 }
 
 // ok
+
 func main() {
 	ch := make(chan int)
 
@@ -104,6 +112,7 @@ func main() {
 }
 
 // ok
+
 func main() {
 	ch := make(chan int, 1)
 
@@ -118,6 +127,7 @@ func main() {
 }
 
 // deadlock
+
 func main() {
 	ch := make(chan int)
 
@@ -132,6 +142,7 @@ func main() {
 }
 
 // ok, because of the sender goroutine will block until the receiver goroutine is ready.
+
 func main() {
 	ch := make(chan int)
 
@@ -149,6 +160,7 @@ func main() {
 }
 
 // ok
+
 func main() {
 	ch := make(chan int)
 
@@ -174,6 +186,7 @@ func main() {
 }
 
 // panic deadlock because of the loop that is waiting for the channel to be closed.
+
 func main() {
 	ch := make(chan int)
 

@@ -1,5 +1,7 @@
 1. interface - weighs 16: pointer to type, pointer to value. type contains dynamic array with methods
 
+
+
 how methods are attached to structs:
 type Method struct {
 	name    string           
@@ -12,4 +14,4 @@ type TypeDescriptor struct {
 	ptrMethods   []Method
 }
 
-2. just compare struct method sets with interface methods sets
+2. just compare struct method sets with interface methods sets	``
