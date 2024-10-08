@@ -1,10 +1,3 @@
-package main
-
-import (
-	"fmt"
-	"unsafe"
-)
-
 func intToSlice(num int) []int {
 	var res []int
 
