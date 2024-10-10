@@ -73,3 +73,26 @@ func customAppend(slice []int, elems ...int) []int {
 	copy(slice[oldLen:], elems)
 	return slice
 }
+
+// isPalindrome
+
+// reverse
+
+
+for i, word := range words {
+	for j := 0; j <= len(word); j++ {
+		left, right := word[:j], word[j:]
+
+		if isPalindrome(left) {
+			if idx, found := wordMap[right]; found && idx != i {
+				res = append(res, []int{idx, i})
+			}
+		}
+
+		if isPalindrome(right) && j != len(word) {
+			if idx, found := wordMap[left]; found && idx != i {
+				res = append(res, []int{i, idx})
+			}
+		}
+	}
+}
