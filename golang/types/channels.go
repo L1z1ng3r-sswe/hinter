@@ -208,3 +208,30 @@ func main() {
 		fmt.Println("Received:", val)
 	}
 }
+
+// deadlock, because ch<-10 blocks until it is read. to fix it buffirize the channel
+
+func main() {
+	ch := make(chan int)
+
+	ch <- 10
+	<-ch
+	fmt.Println("done")
+	close(ch)
+
+	for _ = range ch {
+		fmt.Println("ura")
+	}
+}
+
+// ok
+
+func main() {
+	ch := make(chan int)
+
+	go func() {
+		ch <- 1
+	}()
+
+	<-ch
+}
