@@ -12,31 +12,31 @@
 
 ### Read Uncommitted <a id="read-uncommitted"></a>
 
-The lowest level of isolation where transactions can read uncommitted changes made by other transactions.
+Самый низкий уровень изоляции, при котором транзакции могут читать незафиксированные изменения, внесенные другими транзакциями.
 
 ---
 
 ### Read Committed <a id="read-committed"></a>
 
-This level ensures that a transaction can only read data that has been committed by other transactions.
+Этот уровень гарантирует, что транзакция может читать только данные, зафиксированные другими транзакциями.
 
 ---
 
 ### Repeatable Read <a id="repeatable-read"></a>
 
-At this level, a transaction is guaranteed to see the same data when reading the same row multiple times.
+На этом уровне транзакция гарантированно увидит одни и те же данные при многократном чтении одной и той же строки.
 
 ---
 
 ### Serializable <a id="serializable"></a>
 
-The highest isolation level, where transactions are executed in a way that it appears as if they are executed serially.
+Самый высокий уровень изоляции, при котором транзакции выполняются так, как будто они выполняются последовательно.
 
 ---
 
 ### Problems Solved by Transaction Isolation Levels <a id="problems-solved-by-transaction-isolation-levels"></a>
 
-- **Dirty Reads**: Occurs when a transaction reads data that has been modified by another transaction but not yet committed.
-- **Non-Repeatable Reads**: Happens when a transaction reads the same row multiple times and gets different results because another transaction modified the row in the meantime.
-- **Phantom Reads**: Occurs when a transaction reads a set of rows that match a condition, and another transaction inserts or deletes rows that match the condition, leading to different results on subsequent reads.
-- **Lost Updates**: Occurs when two transactions simultaneously update the same row, and one of the updates is lost.
+- **Dirty Reads**: Происходит, когда транзакция считывает данные, которые были изменены другой транзакцией, но еще не зафиксированы.
+- **Non-Repeatable Reads**: : Происходят, когда транзакция считывает одну и ту же строку несколько раз и получает разные результаты, потому что другая транзакция изменила строку в это время.
+- **Phantom Reads**: Происходит, когда транзакция считывает набор строк, соответствующих условию, а другая транзакция вставляет или удаляет строки, соответствующие условию, что приводит к другим результатам при последующих чтениях.
+- **Lost Updates**: Происходит, когда две транзакции одновременно обновляют одну и ту же строку, и одно из обновлений теряется.

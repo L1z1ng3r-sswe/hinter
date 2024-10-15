@@ -1,24 +1,24 @@
-func intToSlice(num int) []int {
+func intToSlice(num int) []int { // 1234 -> [1,2,3,4]
 	var res []int
 
 	for num > 0 {
-		digit := num % 10
-		num /= 10
-		res = append([]int{digit}, res...)
+		lastDigit := num % 10 // pick the curr digit
+		res = append([]int{lastDigit}, res...)
+		num /= 10 // shift to the next digit
 	}
 
 	return res
 }
 
-func sliceToInt(digits []int) int {
-	var num int
+func sliceToInt(digits []int) int { // 1,2,3,4
+	var res int
 
 	for _, digit := range digits {
-		num *= 10
-		num += digit
+		res *= 10
+		res += digit
 	}
 
-	return num
+	return res
 }
 
 // change the last value with the i
@@ -37,7 +37,8 @@ func removePreserveOrder(nums []int, i int) []int { // preserve the order but ca
 
 // The copy function in Go copies elements from a source slice to a destination slice. It fills the destination slice starting from its first element. The function copies up to the lesser of the lengths of the two slices (i.e., the number of elements copied is min(len(dest), len(src))). The copy function works with indices under the hood, copying elements one-by-one from the source to the destination. Returns the len of the smallest slices
 
-// i++ doesn't return any value, if u will try to fmt.Println(i++) <- compile error, missing ,
+// iterate with unsafe pointer
+
 func iterate(slice []int) {
 	if len(slice) == 0 {
 		return
@@ -74,25 +75,18 @@ func customAppend(slice []int, elems ...int) []int {
 	return slice
 }
 
-// isPalindrome
-
-// reverse
-
-
-for i, word := range words {
-	for j := 0; j <= len(word); j++ {
-		left, right := word[:j], word[j:]
-
-		if isPalindrome(left) {
-			if idx, found := wordMap[right]; found && idx != i {
-				res = append(res, []int{idx, i})
-			}
+func isPalindrome(str string) bool {
+	for i, j := 0, len(str)-1; i < j; i, j = i+1, j-1 {
+		if str[i] != str[j] {
+			return false
 		}
+	}
 
-		if isPalindrome(right) && j != len(word) {
-			if idx, found := wordMap[left]; found && idx != i {
-				res = append(res, []int{i, idx})
-			}
-		}
+	return true
+}
+
+func reverse(slice []int) {
+	for i, j := 0, len(slice)-1; i < j; i, j = i+1, j-1 {
+		slice[i], slice[j] = slice[j], slice[i]
 	}
 }

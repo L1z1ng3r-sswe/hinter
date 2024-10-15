@@ -7,31 +7,25 @@
 
 ---
 
-## Database Concepts Details
-
 ### Normalization Levels <a id="normalization-levels"></a>
 
-- **1NF**: Atomic values, no repeating groups or arrays.
-- **2NF**: No partial dependencies on a primary key.
-- **3NF**: No transitive dependency on the primary key.
-- **BCNF**: Every determinant is a candidate key.
-- **4NF**: No multi-valued dependencies.
-- **5NF**: No join dependencies.
+- **1NF**: Все данные должны быть разбиты на минимальные, неделимые части. В таблице не должно быть повторяющихся групп данных или массивов.
+- **2NF**: Каждая колонка в таблице должна зависеть от всего первичного ключа, а не от его части (это важно для таблиц с составными ключами).
+- **3NF**: Данные не должны зависеть от других неключевых колонок. Они должны зависеть только от первичного ключа. Это предотвращает ситуации, когда информация в одной колонке может быть выведена из другой неключевой колонки, обеспечивая целостность данных.
+- **BCNF**: Любой столбец, который определяет другие столбцы, должен быть ключом. То есть, если один столбец влияет на другой, он должен быть кандидатом на ключ.
+- **4NF**: Данные не должны иметь сложных зависимостей, когда одно значение связано с несколькими другими значениями в разных строках.
+- **5NF**: Таблицу нельзя разделить на более мелкие таблицы, чтобы восстановить исходные данные через объединения (join).
 
 ---
 
-### Replication <a id="replication"></a>
+### Репликация <a id="replication"></a>
 
-Replication is the process of copying and maintaining database objects across multiple servers to ensure redundancy.
+Репликация — это процесс копирования и поддержания объектов базы данных на нескольких серверах для обеспечения их резервирования и высокой доступности.
 
----
+### Шардинг <a id="sharding"></a>
 
-### Sharding <a id="sharding"></a>
+Шардинг — это метод горизонтального разбиения данных в базе данных, при котором данные распределяются по нескольким серверам. Это помогает улучшить масштабируемость и управлять большими объемами информации.
 
-Sharding is a method of horizontal partitioning in databases where data is distributed across multiple servers.
+### Партиционирование <a id="partitioning"></a>
 
----
-
-### Partitioning <a id="partitioning"></a>
-
-Partitioning involves splitting a database into distinct sections to improve performance and manageability.
+Партиционирование — это разделение базы данных на отдельные части, чтобы улучшить производительность и упростить управление данными.

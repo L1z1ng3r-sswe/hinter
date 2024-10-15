@@ -19,8 +19,6 @@
 
 The Factory Pattern предоставляет возможность создавать объекты без указания точного класса создаваемого объекта.
 
-The Factory Pattern provides a way to create objects without specifying the exact class of object that will be created. This pattern is useful when the exact type of the object can be determined at runtime.
-
 ```go
 package main
 
@@ -91,8 +89,6 @@ func main() {
 
 The Singleton Pattern — это шаблон творческого проектирования, который гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру.
 
-The Singleton pattern is a creational design pattern that ensures a class has only one instance and provides a global point of access to that instance.
-
 ```go
 type Singleton struct {
 	Value int
@@ -103,7 +99,6 @@ var instance *Singleton
 var once sync.Once
 
 func GetInstance() *Singleton {
-	// The once.Do() ensures the following code runs only once
 	once.Do(func() {
 		instance = &Singleton{Value: 42}
 		fmt.Println("Creating Singleton instance")
@@ -116,9 +111,7 @@ func GetInstance() *Singleton {
 
 ### Builder Pattern <a id="builder-pattern"></a>
 
-The Builder Pattern отделяет построение сложного объекта от его представления, особенно полезен, когда у вас есть объект со множеством дополнительных параметров или сложными шагами инициализации.
-
-The Builder Pattern separates the construction of a complex object from its representation, especially helpful when you have an object with many optional parameters or complex initialization steps.
+Builder Pattern отделяет построение сложного объекта от его представления, особенно полезен, когда у вас есть объект со множеством дополнительных параметров или сложными шагами инициализации.
 
 ```go
 type House struct {
@@ -172,8 +165,6 @@ func (b *HouseBuilder) Build() House {
 ### Observer Pattern <a id="observer-pattern"></a>
 
 The Observer Pattern определяет связь «один ко многим» между объектами, поэтому, когда один объект меняет состояние, все его зависимые объекты уведомляются.
-
-The Observer Pattern defines a one-to-many relationship between objects so that when one object changes state, all its dependents are notified.
 
 ```go
 type Observer interface {
@@ -230,10 +221,7 @@ func (o *ConcreteObserver) Update(state string) {
 
 ### Strategy Pattern <a id="strategy-pattern"></a>
 
-The Strategy pattern - это шаблон поведенческого проектирования, который позволяет вам определить семейство алгоритмов, инкапсулировать каждый из них и сделать их взаимозаменяемыми. Шаблон стратегии позволяет алгоритму изменяться независимо от клиентов, которые его используют.
-
-The Strategy pattern is a behavioral design pattern that allows you to define a family of algorithms, encapsulate each one, and make them interchangeable. The strategy pattern lets the algorithm vary independently from clients that use it.
-
+Strategy pattern - это шаблон поведенческого проектирования, который позволяет вам определить семейство алгоритмов, инкапсулировать каждый из них и сделать их взаимозаменяемыми. Шаблон стратегии позволяет алгоритму изменяться независимо от клиентов, которые его используют.
 
 ```go
 type DiscountStrategy interface {
@@ -292,9 +280,7 @@ func main() {
 
 ### Adapter Pattern <a id="adapter-pattern"></a>
 
-The Adapter Pattern позволяет несовместимым интерфейсам работать вместе.
-
-The Adapter Pattern allows incompatible interfaces to work together.
+Adapter Pattern позволяет несовместимым интерфейсам работать вместе.
 
 ```go
 type JSONLogger struct{}
@@ -324,9 +310,7 @@ type Logger interface {
 
 ### Decorator Pattern <a id="decorator-pattern"></a>
 
-The Decorator Pattern позволяет динамически добавлять поведение к отдельному объекту, не затрагивая поведение других объектов того же класса. (обеспечивает OCP)
-
-The Decorator Pattern allows behavior to be added to an individual object, dynamically, without affecting the behavior of other objects from the same class. (ensures OCP)
+Decorator Pattern позволяет динамически добавлять поведение к отдельному объекту, не затрагивая поведение других объектов того же класса. (обеспечивает OCP)
 
 ```go
 type Notifier interface {
@@ -374,8 +358,6 @@ func main() {
 ---
 
 ### Facade Pattern <a id="facade-pattern"></a>
-
-The Facade Pattern provides a simplified interface to a complex subsystem.
 
 The Facade Pattern обеспечивает упрощенный интерфейс для сложной подсистемы.
 
@@ -460,8 +442,6 @@ func main() {
 
 The Proxy Pattern предоставляет суррогат или заполнитель для другого объекта для управления доступом к нему.
 
-The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.
-
 ```go
 type File interface {
 	Display()
@@ -507,9 +487,7 @@ func main() {
 
 ### Command Pattern <a id="command-pattern"></a>
 
-The Command Pattern инкапсулирует запрос как объект, тем самым позволяя параметризовать клиентов с различными запросами.
-
-The Command Pattern encapsulates a request as an object, thereby letting you parameterize clients with different requests.
+Command Pattern инкапсулирует запрос как объект, тем самым позволяя параметризовать клиентов с различными запросами.
 
 ```go
 type Command interface {

@@ -11,22 +11,22 @@
 
 ### Encapsulation <a id="encapsulation"></a>
 
-Controlled access to data through public methods.
+Контролируемый доступ к данным с помощью общедоступных методов. Just a register
 
 ---
 
 ### Abstraction <a id="abstraction"></a>
 
-Achieved through interfaces that hide implementation details and expose behavior.
+Достигается с помощью интерфейсов, которые скрывают детали реализации и раскрывают поведение.
 
 ---
 
 ### Inheritance (Composition over Inheritance in Go) <a id="inheritance-composition-over-inheritance-in-go"></a>
 
-Go uses composition instead of classical inheritance by embedding structs within other structs.
+Go использует композицию вместо классического наследования, встраивая структуры в другие структуры.
 
 ---
 
 ### Polymorphism <a id="polymorphism"></a>
 
-Achieved through interfaces that allow different types to be treated uniformly as the interface type.
+Достигается посредством интерфейсов, которые позволяют единообразно рассматривать различные типы как тип интерфейса.

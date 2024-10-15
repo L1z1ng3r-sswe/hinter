@@ -16,11 +16,6 @@
 
 Удаление таких компонентов, как фары или двигатель, не нарушает SRP, поскольку они относятся к одной общей обязанности — эксплуатации автомобиля. Пока класс "Автомобиль" отвечает за работу автомобиля, он соблюдает SRP.
 
-
-The Single Responsibility Principle (SRP) states that a class should have only one responsibility. For example, in the case of a car, its main responsibility is performing actions related to driving: moving, signaling, and using headlights. These functions are related because they are all part of operating the car.
-
-Removing components like headlights or the engine doesn’t break SRP because they all belong to the same responsibility—operating the car. As long as the "Car" class handles the car's overall behavior, it adheres to SRP.
-
 ---
 
 ### Open/Closed Principle (OCP) <a id="open-closed-principle-ocp"></a>
@@ -29,11 +24,6 @@ Removing components like headlights or the engine doesn’t break SRP because th
 
 Например, у меня есть машина с фарами. Я хочу добавить в одну из фар новую функцию. Если я внесу изменения напрямую, фары могут перестать работать, и даже откат изменений может не решить проблему. Однако, если внести изменения снаружи, например, через внешний модуль или оболочку, фары будут работать, и внешняя часть легко удаляется без последствий.
 
-
-Software objects (classes, modules, functions, etc.) should be open for extension but closed for modification.
-
-For example, I have a car with headlights. I want to add a new feature to one of the headlights. If I change something directly, the headlights may stop working, and rolling back the changes may not fix the problem. However, if I make changes externally, like through a wrapper or module, the headlights will work, and the external part can be removed without consequences.
-
 ---
 
 ### Liskov Substitution Principle (LSP) <a id="liskov-substitution-principle-lsp"></a>
@@ -41,11 +31,6 @@ For example, I have a car with headlights. I want to add a new feature to one of
 Принцип подстановки Барбары Лисков (Liskov Substitution Principle, LSP) заключается в том, что объекты подклассов должны заменять объекты базового класса без нарушения работы программы.
 
 Пример: стандарт крепления VESA для мониторов. Допустим, у нас есть базовый класс `Monitor`, и несколько подклассов для разных типов мониторов. Контейнер VESA может крепить любой монитор, реализующий интерфейс крепления, и независимо от того, заменим мы стандартный монитор на другой, система будет работать корректно, что и соблюдает принцип LSP.
-
-
-The Liskov Substitution Principle (LSP) states that objects of a subclass should be replaceable with objects of the base class without altering the correctness of the program.
-
-Example: the VESA mount standard for monitors. Suppose we have a base class `Monitor` and several subclasses for different types of monitors. A VESA mount (container) can mount any monitor that implements the interface. Regardless of whether we swap the standard monitor with another one, the system will still work correctly, adhering to LSP.
 
 ---
 
