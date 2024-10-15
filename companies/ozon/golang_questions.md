@@ -1,4 +1,13 @@
-# Example 1: Slice Append Behavior
+## Examples
+
+1. [Slice Append Behavior](#slice-append-behavior)
+2. [Custom Error Handling](#custom-error-handling)
+3. [Zip Two Slices Together](#zip-two-slices-together)
+4. [Map Concurrent Access with Mutex](#map-concurrent-access-with-mutex)
+
+---
+
+### Slice Append Behavior <a id="slice-append-behavior"></a>
 
 ```go
 func main() {
@@ -22,7 +31,7 @@ func addNums(nums []int) {
 
 ---
 
-# Example 2: Custom Error Handling
+### Custom Error Handling <a id="custom-error-handling"></a>
 
 ```go
 func handle() error {
@@ -40,12 +49,12 @@ func (ce customError) Error() string {
 }
 ```
 
-Explanation:
+**Explanation:**
 - The `customError` struct implements the `Error` interface by defining the `Error` method, which allows us to return it as an `error`.
 
 ---
 
-# Example 3: Zip Two Slices Together
+### Zip Two Slices Together <a id="zip-two-slices-together"></a>
 
 ```go
 func zip(s1, s2 []int) [][]int {
@@ -69,13 +78,13 @@ func min(a, b int) int {
 }
 ```
 
-Explanation:
+**Explanation:**
 - The `zip` function pairs elements from two slices and returns a slice of pairs.
 - It uses the `min` function to ensure that the result is as long as the shorter of the two input slices.
 
 ---
 
-# Example 4: Map Concurrent Access with Mutex
+### Map Concurrent Access with Mutex <a id="map-concurrent-access-with-mutex"></a>
 
 ```go
 package main
