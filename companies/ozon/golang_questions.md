@@ -87,52 +87,37 @@ func min(a, b int) int {
 ### Map Concurrent Access with Mutex <a id="map-concurrent-access-with-mutex"></a>
 
 ```go
-package main
-
-import (
-	"fmt"
-	"sync"
-)
-
 func main() {
-	x := make(map[int]int, 1)
-	var mu sync.Mutex
+	x := make(map[int]int)
 	var wg sync.WaitGroup
 
-	ch1 := make(chan struct{}, 1)
+	ch1 := make(chan struct{})
 	ch2 := make(chan struct{})
 	ch3 := make(chan struct{})
-  
+
 	wg.Add(3)
 
 	go func() {
 		defer wg.Done()
-		<-ch
-		mu.Lock()
-		defer mu.Unlock()
+		<-ch1
 		x[1] = 2
-		ch <- struct{}{} 
+		ch2 <- struct{}{}
 	}()
 
 	go func() {
 		defer wg.Done()
-		<-ch
-		mu.Lock()
-		defer mu.Unlock()
+		<-ch2
 		x[1] = 5
-		ch <- struct{}{} 
+		ch3 <- struct{}{}
 	}()
 
 	go func() {
 		defer wg.Done()
-		<-ch
-		mu.Lock()
-		defer mu.Unlock()
+		<-ch3
 		x[1] = 10
-		close(ch) 
 	}()
 
-	ch <- struct{}{}
+	ch1 <- struct{}{}
 
 	wg.Wait()
 
