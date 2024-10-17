@@ -197,9 +197,10 @@ func unpredictableFunc() int64 {
 }
 
 func predictable(timeout time.Duration) int64 {
-	ch := make(chan int64)
+	ch := make(chan int64, 1)
 	go func() {
 		ch <- unpredictableFunc()
+		close(ch)
 	}()
 
 	ctx, _ := context.WithTimeout(context.Background(), timeout)
