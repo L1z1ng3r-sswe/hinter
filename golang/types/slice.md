@@ -6,6 +6,7 @@
 6. [Функция customAppend](#custom-append-function)  
 7. [Функция isPalindrome](#is-palindrome-function)  
 8. [Функция reverse](#reverse-function)
+9. [Method copy](#copy-method)
 
 ---
 
@@ -150,8 +151,14 @@ func isPalindrome(str string) bool {
 func reverse(slice []int) {
 	for i, j := 0, len(slice)-1; i < j; i, j = i+1, j-1 {
 		slice[i], slice[j] = slice[j], slice[i]
-	}
 }
 ```
 
 **Описание**: Разворачивает срез, меняя порядок элементов на обратный.
+
+---
+
+### Method copy <a id="copy-method"></a>
+
+
+// The copy function in Go copies elements from a source slice to a destination slice. It fills the destination slice starting from its first element. The function copies up to the lesser of the lengths of the two slices (i.e., the number of elements copied is min(len(dest), len(src))). The copy function works with indices under the hood, copying elements one-by-one from the source to the destination. Returns the len of the smallest slices

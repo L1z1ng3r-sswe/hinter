@@ -12,21 +12,21 @@
 ### Функция merge <a id="merge-function"></a>
 
 ```go
-func merge(chans ...<-chan int) chan int {
+func merge(chans ...<-chan int) <-chan int {
 	res := make(chan int)
 	var wg sync.WaitGroup
 
-	receiver := func(ch <-chan int) {
-		defer wg.Done()
-
-		for elem := range ch {
-			res <- elem
-		}
-	}
-
 	for _, ch := range chans {
+		ch := ch
 		wg.Add(1)
-		go receiver(ch)
+
+		go func() {
+			defer wg.Done()
+
+			for val := range ch {
+				res <- val
+			}
+		}()
 	}
 
 	go func() {
@@ -43,14 +43,13 @@ func merge(chans ...<-chan int) chan int {
 ### Функция throttle <a id="throttle-function"></a>
 
 ```go
-func throttle(f func(), ms time.Duration) func() {
-	var lastTime time.Time
+func throttle(fn func(), ms time.Duration) func() {
+	now := time.Now()
 
 	return func() {
-		now := time.Now()
-		if now.Sub(lastTime) < ms {
-			lastTime = now
-			f()
+		if time.Now().Sub(now) >= ms { // or time.Since
+			now = time.Now()
+			fn()
 		}
 	}
 }
@@ -61,37 +60,41 @@ func throttle(f func(), ms time.Duration) func() {
 ### Функция calculateSum <a id="calculate-sum-function"></a>
 
 ```go
-const n = 6
 
-func calculateSum() {
-	var res int
-	chDone := make(chan int)
-	chWait := make(chan struct{})
-	defer func() {
-		close(chWait)
-		close(chDone)
-	}()
-
-	for i := 1; i <= n; i++ {
-		go func(i int) {
-			chDone <- i
-		}(i)
+func fetch(urls []string, limit int) {
+	if len(urls) < limit {
+		limit = len(urls)
 	}
 
-	go func() {
-		var counter int
-		for elem := range chDone {
-			res += elem
-			counter++
-			if counter == n {
-				chWait <- struct{}{}
+	var wg sync.WaitGroup
+	ch := make(chan string) // if no memory-contraints u can make it buffered.
+
+	wg.Add(limit)
+	for i := 0; i < limit; i++ {
+		go func() {
+			defer wg.Done()
+			for url := range ch {
+				get(url)
 			}
-		}
-	}()
+		}()
+	}
 
-	<-chWait
+	for _, url := range urls {
+		ch <- url
+	}
+	close(ch)
 
-	fmt.Println(res)
+	wg.Wait()
+}
+
+func get(url string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println("Error Happened: ", err.Error())
+	}
+	defer resp.Body.Close()
+
+	fmt.Println(resp.Status)
 }
 ```
 
@@ -101,13 +104,12 @@ func calculateSum() {
 
 ```go
 func fetch(urls []string, limit int) {
-	n := len(urls)
-	if n < limit {
-		limit = n
+	if len(urls) < limit {
+		limit = len(urls)
 	}
 
 	wg := sync.WaitGroup{}
-	chURLs := make(chan string)
+	ch := make(chan string) // if no memory-contraints u can make it buffered.
 
 	wg.Add(limit)
 	for i := 0; i < limit; i++ {
@@ -218,23 +220,26 @@ func predictable(timeout time.Duration) int64 {
 ### Функция semaphore <a id="semaphore-function"></a>
 
 ```go
-func worker(id int, sem chan struct{}) {
-	sem <- struct{}{}
-	
-	fmt.Printf("Worker %d is done.\n", id)
-
-	<-sem
-}
 
 func main() {
-	const maxWorkers = 3
-	sem := make(chan struct{}, maxWorkers)
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
 
-	for i := 1; i <= 5; i++ {
-		go worker(i, sem)
+	maxWorkers := 10
+	ch := make(chan struct{}, maxWorkers)
+
+	for i := 0; i < 100; i++ {
+		i := i
+		ch <- struct{}{}
+		go worker(i, ch, r)
 	}
+}
 
-	time.Sleep(10 * time.Second)
+func worker(id int, ch chan struct{}, r *rand.Rand) {
+	sleepDur := r.Int63n(4)
+	time.Sleep(time.Second * time.Duration(sleepDur))
+	fmt.Println(id, "done, time: ", sleepDur)
+	<-ch
 }
 ```
 
