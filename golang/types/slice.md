@@ -162,3 +162,18 @@ func reverse(slice []int) {
 
 
 // The copy function in Go copies elements from a source slice to a destination slice. It fills the destination slice starting from its first element. The function copies up to the lesser of the lengths of the two slices (i.e., the number of elements copied is min(len(dest), len(src))). The copy function works with indices under the hood, copying elements one-by-one from the source to the destination. Returns the len of the smallest slices
+
+```go
+func main() {
+	sl := make([]int, 2, 5)
+	add(sl)
+	fmt.Println(sl) // 0,1
+	sl = sl[:5]     // this way works 0,1,2,3,5
+}
+
+func add(sl []int) {
+	sl[1] = 1
+	sl = append(sl, []int{1, 2, 3}...)
+}
+
+```
