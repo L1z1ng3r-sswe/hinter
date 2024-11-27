@@ -3,12 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	x := 2
-	inc(x)
+	str := "こんにちは"
 
-	fmt.Println(x)
-}
-
-func inc(i interface{}) int {
-	return i.(int)
+	for i := 0; i < len(str); i++ {
+		fmt.Println(str[i])
+	}
 }
