@@ -165,10 +165,10 @@ func reverse(slice []int) {
 
 ```go
 func main() {
-	sl := make([]int, 2, 5)
+	sl := make([]int, 2, 5) // [0, 1] 1, 2, 3]
 	add(sl)
 	fmt.Println(sl) // 0,1
-	sl = sl[:5]     // this way works 0,1,2,3,5
+	sl = sl[:5]     // this way works 0,1,1,2,3
 }
 
 func add(sl []int) {

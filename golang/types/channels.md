@@ -5,7 +5,11 @@
 ### 5. [Функция channels notification](#channels-notification-function)  
 ### 6. [Функция unpredictableFunc и predictable](#unpredictable-predictable-functions)  
 ### 7. [Функция semaphore](#semaphore-function)  
-### 8. [Закрытие каналов в Go](#why-close-channels-in-go)
+### 8. [Обертка над logger](#multythread-wrapper)
+### 9. [Get or Create in map](#get-or-create)
+### 10. [Count the number of requests](#num-request)
+### 11. [Concurrent write into a slice](#concurrent-use-slice)
+### 12. [Закрытие каналов в Go](#why-close-channels-in-go)
 
 ---
 
@@ -59,42 +63,31 @@ func throttle(fn func(), ms time.Duration) func() {
 
 ### Функция calculateSum <a id="calculate-sum-function"></a>
 
-```go
-
-func fetch(urls []string, limit int) {
-	if len(urls) < limit {
-		limit = len(urls)
-	}
-
+```go	
+func calculateSum(n int) int {
+	ch := make(chan int)
 	var wg sync.WaitGroup
-	ch := make(chan string) // if no memory-contraints u can make it buffered.
+	for i := range n+1 {
+		i := i
 
-	wg.Add(limit)
-	for i := 0; i < limit; i++ {
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for url := range ch {
-				get(url)
-			}
+			ch <- i
 		}()
 	}
 
-	for _, url := range urls {
-		ch <- url
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	var res int = 0
+	for num := range ch {
+		res += num
 	}
-	close(ch)
 
-	wg.Wait()
-}
-
-func get(url string) {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Println("Error Happened: ", err.Error())
-	}
-	defer resp.Body.Close()
-
-	fmt.Println(resp.Status)
+	return res
 }
 ```
 
@@ -109,7 +102,7 @@ func fetch(urls []string, limit int) {
 	}
 
 	wg := sync.WaitGroup{}
-	ch := make(chan string) // if no memory-contraints u can make it buffered.
+	chURLs := make(chan string)
 
 	wg.Add(limit)
 	for i := 0; i < limit; i++ {
@@ -245,6 +238,155 @@ func worker(id int, ch chan struct{}, r *rand.Rand) {
 
 **Описание**: Функция `worker` использует семафор для ограничения количества одновременно выполняемых горутин. В `main` функции запускается 5 горутин, но только 3 из них могут выполняться одновременно, благодаря использованию буферизированного канала `sem`.
 
+### Многопоточная обертка над logger <a id="multythread-wrapper"></a>
+
+```go
+
+type WrappedLogger struct {
+	logger   *FileLogger
+	msgBuff  chan string
+	closeMu  sync.RWMutex
+	done     chan struct{}
+	isClosed bool
+}
+
+func NewWrappedLogger(logger *FileLogger, buffSize int) WrappedLogger {
+	wrappedLogger := WrappedLogger{
+		logger:  logger,
+		msgBuff: make(chan string, buffSize),
+		done:    make(chan struct{}),
+	}
+
+	go func() {
+		defer close(wrappedLogger.done)
+
+		for msg := range wrappedLogger.msgBuff {
+			logger.Log(msg)
+		}
+	}()
+
+	return wrappedLogger
+}
+
+func (l *WrappedLogger) Log(msg string) error {
+	l.closeMu.RLock()
+	defer l.closeMu.RUnlock()
+
+	if !l.isClosed {
+		l.msgBuff <- msg
+	}
+
+	return nil
+}
+
+func (l *WrappedLogger) Close() {
+	l.closeMu.Lock()
+	defer l.closeMu.Unlock()
+
+	if !l.isClosed {
+		l.isClosed = true
+		close(l.msgBuff)
+		<-l.done
+		l.logger.Close()
+	}
+}
+```
+
+**Описание**: Определяем структуру `WrappedLogger`, которая оборачивает `FileLogger` для обеспечения буферизированного и потокобезопасного логирования. Он обрабатывает сообщения асинхронно с использованием буферизированного канала (`msgBuff`) и гарантирует безопасное закрытие с помощью `sync.RWMutex`. Метод `Close` аккуратно завершает работу логгера, очищая буфер и освобождая ресурсы.
+
+### Get or create in a map <a id="get-or-create"></a>
+
+```go
+type SafeMap struct {
+	data map[string]string
+	rwm sync.RWMutex
+}
+
+func (s *SafeMap) Read(key string) string, bool {
+	s.rwm.RLock()
+	defer s.rwm.RUnlock()
+
+	return s.data[key]
+}
+
+func (s *SafeMap) Write(key string, value string) string {
+	s.rwm.Lock()	
+	defer s.rwm.Unlock()
+
+	val, ok := s.data[key]
+	if ok {
+		return val
+	}
+
+	s.data[key] = value
+	return value
+}
+
+func (s *SageMap) GetOrCreate(key, value string) string {
+	if val, ok := s.Read(key); ok {
+		return val
+	}
+
+	return s.Write(key, value)
+}
+```
+
+### Count the number of requests <a id="num-request"></a>
+
+```go
+var count int64
+
+const numRequests = 1000
+
+func main() {
+	var wg sync.WaitGroup
+
+	for i := 0; i < numRequests; i++ {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			doWork()
+		}()
+	}
+
+	wg.Wait()
+	fmt.Println(atomic.LoadInt64(&count))
+}
+
+func doWork() {
+	time.Sleep(time.Millisecond * 200) // Simulate a network request
+	atomic.AddInt64(&count, 1)
+}
+```
+
+### Concurrent write into a slice <a id="concurrent-use-slice"></a>
+
+```go
+func main() {
+	n := 200
+	c := []int{} // cap = 0, len = 0
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+
+	for _ = range n {
+		wg.Add(1)
+
+		go func() {
+			mu.Lock()
+			defer mu.Unlock()
+			defer wg.Done()
+
+			c = append(c, 1)
+		}()
+	}
+
+	wg.Wait()
+
+	fmt.Println(len(c))
+}
+```
+
 ### Закрытие каналов в Go <a id="why-close-channels-in-go"></a>
 
 **Причина закрытия каналов**:
@@ -252,7 +394,4 @@ func worker(id int, ch chan struct{}, r *rand.Rand) {
 2. **Оповещение через `range`**: При использовании `range` для чтения из канала цикл завершится, только если канал закрыт.
 3. **Использование `select`**: Закрытие каналов помогает корректно завершать ожидание данных через конструкцию `select`.
 
-
 ch = make(chan int, 0) - is possible operation
-
-
