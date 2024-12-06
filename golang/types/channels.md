@@ -10,7 +10,8 @@
 ### 10. [Count the number of requests](#num-request)
 ### 11. [Concurrent write into a slice](#concurrent-use-slice)
 ### 12. [Zero value](#zero-value)
-### 12. [Закрытие каналов в Go](#why-close-channels-in-go)
+### 13. [Merge with context](#merge-with-context)
+### 14. [Закрытие каналов в Go](#why-close-channels-in-go)
 
 ---
 
@@ -389,6 +390,7 @@ func main() {
 ```
 
 ### Zero Value <a id="zero-value"></a>
+
 ```go
 func main() {
 	ch := make(chan int)
@@ -421,6 +423,44 @@ func main() {
 //         /mnt/c/Users/krasa/OneDrive/Desktop/backup/interviews/main.go:11 +0x66
 // exit status 2
 ```
+
+###  <a id="merge-with-context"></a>
+
+```go
+func merge(ctx context.Context, chs ...<-chan int) <-chan int {
+	var res = make(chan int)
+	var wg sync.WaitGroup
+
+	for _, ch := range chs {
+		wg.Add(1)
+		ch := ch
+
+		go func() {
+			defer wg.Done()
+
+			for {
+				select  {
+					case num, ok := <-ch:
+						if !ok {
+							return
+						}
+						res <-num
+					case <-ctx.Done():
+						return
+				}
+			}
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(res)
+	}()
+
+	return res
+}
+```
+
 
 ### Закрытие каналов в Go <a id="why-close-channels-in-go"></a>
 
