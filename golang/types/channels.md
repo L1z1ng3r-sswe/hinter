@@ -9,6 +9,7 @@
 ### 9. [Get or Create in map](#get-or-create)
 ### 10. [Count the number of requests](#num-request)
 ### 11. [Concurrent write into a slice](#concurrent-use-slice)
+### 12. [Zero value](#zero-value)
 ### 12. [Закрытие каналов в Go](#why-close-channels-in-go)
 
 ---
@@ -385,6 +386,40 @@ func main() {
 
 	fmt.Println(len(c))
 }
+```
+
+### Zero Value <a id="zero-value"></a>
+```go
+func main() {
+	ch := make(chan int)
+
+	go func() {
+		fmt.Println("done")
+		ch <- 999
+	}()
+
+	go func() {
+		time.Sleep(time.Second)
+		close(ch)
+
+		val, ok := <-ch
+		fmt.Printf("Value: %d, Channel Open: %t\n", val, ok)
+	}()
+
+	time.Sleep(2 * time.Second)
+}
+
+// the output here is:
+// done
+// Value: 0, Channel Open: false
+// panic: send on closed channel
+
+// goroutine 18 [running]:
+// main.main.func1()
+//         /mnt/c/Users/krasa/OneDrive/Desktop/backup/interviews/main.go:13 +0x65
+// created by main.main in goroutine 1
+//         /mnt/c/Users/krasa/OneDrive/Desktop/backup/interviews/main.go:11 +0x66
+// exit status 2
 ```
 
 ### Закрытие каналов в Go <a id="why-close-channels-in-go"></a>

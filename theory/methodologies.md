@@ -1,169 +1,148 @@
-# Project Management Methodologies, Quality Gates, and SDLC
+### **Методологии управления проектами, Quality Gates и SDLC**
 
-1. [Project Management Methodologies](#project-management-methodologies)
-    - [Waterfall](#waterfall)
-    - [Agile](#agile)
-    - [Scrum](#scrum)
-    - [Kanban](#kanban)
-    - [Blending Methodologies](#blending-methodologies)
-2. [Software Development Life Cycle (SDLC)](#software-development-life-cycle-sdlc)
-    - [Phases](#phases)
-    - [Models](#models)
+1. [Методологии управления проектами](#методологии-управления-проектами)
+   - [Каскадная модель (Waterfall)](#каскадная-модель-waterfall)
+   - [Agile](#agile)
+   - [Scrum](#scrum)
+   - [Kanban](#kanban)
+   - [Смешанные методологии](#смешанные-методологии)
+2. [Жизненный цикл разработки ПО (SDLC)](#жизненный-цикл-разработки-по-sdlc)
+   - [Фазы](#фазы)
 3. [Quality Gates](#quality-gates)
-    - [Definition](#definition)
-    - [Benefits](#benefits)
-    - [Key Metrics](#key-metrics)
-    - [Blockers (in Golang Backend Applications)](#blockers-in-golang-backend-applications)
-    - [Implementation Tools](#implementation-tools)
-    - [GitLab CI Pipelines](#gitlab-ci-pipelines)
+   - [Определение](#определение)
+   - [Преимущества](#преимущества)
+   - [Ключевые метрики](#ключевые-метрики)
+   - [Блокеры (в Go-приложениях)](#блокеры-в-go-приложениях)
+   - [Инструменты для реализации](#инструменты-для-реализации)
+   - [GitLab CI Pipelines](#gitlab-ci-pipelines)
 
 ---
 
-## Project Management Methodologies
+## **Методологии управления проектами**
 
-### Waterfall <a id="waterfall"></a>
+### **Каскадная модель (Waterfall)** <a id="каскадная-модель-waterfall"></a>
 
-A linear and sequential approach, ideal for projects with well-defined requirements. Phases include:
-- **Requirement Gathering**: Complete upfront analysis and documentation.
-- **Design**: Create system architecture and detailed plans.
-- **Implementation**: Develop the solution as per design specifications.
-- **Testing**: Verify that the system meets all requirements.
-- **Deployment**: Deliver the final product.
-- **Maintenance**: Provide updates and bug fixes post-deployment.
-
----
-
-### Agile <a id="agile"></a>
-
-An iterative methodology focused on delivering incremental value through continuous feedback and collaboration. Key features include:
-- **Short Iterations**: Frequent delivery of working software.
-- **Flexibility**: Adapt to changing priorities.
-- **Collaboration**: Strong emphasis on stakeholder involvement.
-- **Blockers Addressed Early**: Agile ceremonies like standups are used to identify and resolve blockers.
+Линейный и последовательный подход, подходящий для проектов с чётко определёнными требованиями. Основные фазы:
+- **Сбор требований**: Полный анализ и документирование требований.
+- **Проектирование**: Создание архитектуры системы и детальных планов.
+- **Реализация**: Разработка решения в соответствии с требованиями.
+- **Тестирование**: Проверка соответствия системы всем требованиям.
+- **Внедрение**: Передача конечного продукта заказчику.
+- **Поддержка**: Обновления и исправление ошибок после запуска.
 
 ---
 
-### Scrum <a id="scrum"></a>
+### **Agile** <a id="agile"></a>
 
-A framework under Agile that organizes work into **sprints** (time-boxed iterations). Core elements:
-- **Roles**: Product Owner, Scrum Master, Development Team.
-- **Ceremonies**:
-  - Sprint Planning
-  - Daily Standups
-  - Sprint Reviews
-  - Retrospectives
-- **Sprint Board**: Tracks tasks with columns like **To Do**, **In Progress**, **Done**.
+Итеративная методология, направленная на доставку ценности с учётом обратной связи и взаимодействия. Основные особенности:
+- **Короткие итерации**: Частая доставка рабочего программного обеспечения.
+- **Гибкость**: Адаптация к изменяющимся приоритетам.
+- **Взаимодействие**: Акцент на участие заинтересованных сторон.
+- **Решение блокеров**: Использование встреч (stand-ups) для устранения проблем.
 
 ---
 
-### Kanban <a id="kanban"></a>
+### **Scrum** <a id="scrum"></a>
 
-A flow-based approach focusing on visualizing work and limiting Work In Progress (WIP). Key components:
-- **Kanban Board**:
-  - Columns such as **Backlog**, **Ready**, **In Progress**, **Testing**, **Done**.
-  - WIP limits to optimize task flow.
-- **Continuous Delivery**: No fixed iterations; work is delivered as soon as it’s ready.
-
----
-
-### Blending Methodologies <a id="blending-methodologies"></a>
-
-In practice, methodologies can be combined to suit project needs:
-- Start with **Waterfall** for detailed planning.
-- Use **Agile/Scrum** for iterative development and deliveries.
-- Use **Kanban** for maintenance and support tasks.
+Фреймворк в рамках Agile, организующий работу в **спринтах** (ограниченные по времени итерации). Основные элементы:
+- **Роли**: Владелец продукта, Scrum-мастер, команда разработчиков.
+- **Церемонии**:
+  - Планирование спринта
+  - Ежедневные встречи
+  - Обзор спринта
+  - Ретроспективы
+- **Доска спринта**: Состояния задач: **To Do**, **In Progress**, **Done**.
 
 ---
 
-## Software Development Life Cycle (SDLC) <a id="software-development-life-cycle-sdlc"></a>
+### **Kanban** <a id="kanban"></a>
 
-SDLC is a structured process for developing high-quality software. It defines a sequence of phases to ensure software meets user requirements and is maintainable.
-
----
-
-### Phases <a id="phases"></a>
-
-1. **Requirement Analysis**:
-   - Collect and analyze business requirements.
-   - Deliverable: Requirement Specification Document.
-2. **Planning**:
-   - Define scope, timeline, resources, and risks.
-   - Deliverable: Project Plan.
-3. **Design**:
-   - Create the architecture, UI/UX design, and database structure.
-   - Deliverable: System Design Document.
-4. **Development**:
-   - Write and integrate the application code.
-   - Deliverable: Functional Software.
-5. **Testing**:
-   - Validate the software against requirements.
-   - Deliverable: Test Reports.
-6. **Deployment**:
-   - Deploy the software to production environments.
-   - Deliverable: Live Software.
-7. **Maintenance**:
-   - Provide updates, bug fixes, and support.
-   - Deliverable: Updated Versions.
+Методология управления потоком, фокусирующаяся на визуализации работы и ограничении количества выполняемых задач. Основные компоненты:
+- **Доска Kanban**:
+  - Колонки: **Backlog**, **Ready**, **In Progress**, **Testing**, **Done**.
+  - Лимиты задач для оптимизации работы.
+- **Непрерывная доставка**: Нет фиксированных итераций; работа завершена, как только она готова.
 
 ---
 
-### Models <a id="models"></a>
+### **Смешанные методологии** <a id="смешанные-методологии"></a>
 
-SDLC can follow various models based on the project’s nature:
-1. **Waterfall Model**: Sequential flow through SDLC phases.
-2. **Iterative Model**: Cyclical approach, refining features incrementally.
-3. **Agile Model**: Focuses on iterative development and collaboration.
-4. **Spiral Model**: Combines iterative development with risk assessment.
-5. **DevOps Model**: Emphasizes automation and continuous delivery.
+На практике методологии могут сочетаться:
+- Использование **Waterfall** для детального планирования.
+- Применение **Agile/Scrum** для итеративной разработки.
+- Применение **Kanban** для задач поддержки.
 
 ---
 
-## Quality Gates
+## **Жизненный цикл разработки ПО (SDLC)** <a id="жизненный-цикл-разработки-по-sdlc"></a>
 
-### Definition <a id="definition"></a>
-
-A **quality gate** is a set of conditions or criteria used to assess the quality of code or processes before they can advance to the next stage in the development lifecycle.
+SDLC — это структурированный процесс, обеспечивающий высокое качество программного обеспечения. Определяет последовательность фаз для выполнения требований пользователей и поддерживаемости ПО.
 
 ---
 
-### Benefits <a id="benefits"></a>
+### **Фазы** <a id="фазы"></a>
 
-1. Ensures code quality and maintainability.
-2. Detects issues early in the development process.
-3. Enforces compliance with standards and regulations.
-4. Reduces technical debt by avoiding problematic code.
-
----
-
-### Key Metrics <a id="key-metrics"></a>
-
-1. **Code Coverage**: Ensures sufficient automated test coverage.
-2. **Critical Issues**: No blocker or critical bugs, especially related to security.
-3. **Code Smells**: Avoidance of redundant logic and overly complex methods.
-4. **Technical Debt**: Ensures debt is kept within acceptable thresholds.
-
----
-
-### Blockers (in Golang Backend Applications) <a id="blockers-in-golang-backend-applications"></a>
-
-Blockers include: SQL injections, runtime panics, missing dependencies, broken tests, performance regressions, deadlocks, race conditions, and incorrect API contracts.
-
----
-
-### Implementation Tools <a id="implementation-tools"></a>
-
-1. **SonarQube**: Quality gate enforcement.
-2. **Static Analysis Tools**:
-   - **GoSec**: Detects security issues in Go code.
-   - **Staticcheck**: Finds bugs and performance issues.
-3. **CI/CD Platforms**: GitLab CI and Google Cloud Build.
+1. **Анализ требований**:
+   - Сбор и анализ бизнес-требований.
+   - Результат: документ спецификации требований.
+2. **Планирование**:
+   - Определение объёма, сроков, ресурсов и рисков.
+   - Результат: проектный план.
+3. **Проектирование**:
+   - Разработка архитектуры, дизайна интерфейсов и структуры БД.
+   - Результат: документ проектирования.
+4. **Разработка**:
+   - Написание и интеграция кода приложения.
+   - Результат: функциональное ПО.
+5. **Тестирование**:
+   - Проверка ПО на соответствие требованиям.
+   - Результат: отчёты о тестировании.
+6. **Внедрение**:
+   - Развёртывание ПО в рабочей среде.
+   - Результат: готовое ПО.
+7. **Поддержка**:
+   - Обновления, исправления ошибок и техподдержка.
+   - Результат: обновлённые версии.
 
 ---
 
-### GitLab CI Pipelines <a id="gitlab-ci-pipelines"></a>
+## **Quality Gates**
+
+### **Определение** <a id="определение"></a>
+
+**Quality Gate** — набор условий или критериев, проверяющих качество кода или процессов перед их переходом на следующую стадию разработки.
+
+---
+
+### **Ключевые метрики** <a id="ключевые-метрики"></a>
+
+1. **Покрытие кода**: Достаточное покрытие автоматическими тестами.
+2. **Критические ошибки**: Отсутствие критических багов, особенно по безопасности.
+3. **"Запахи кода"**: Избежание избыточной логики и сложности.
+4. **Технический долг**: Поддержание долга в допустимых пределах.
+
+---
+
+### **Блокеры (в Go-приложениях)** <a id="блокеры-в-go-приложениях"></a>
+
+Примеры блокеров: SQL-инъекции, паники, недостающие зависимости, падающие тесты, деградация производительности, deadlocks, race condition, некорректные proto-контракты.
+
+---
+
+### **Инструменты для реализации** <a id="инструменты-для-реализации"></a>
+
+1. **SonarQube**: Контроль качества кода.
+2. **Статический анализ**:
+   - **GoSec**: Поиск проблем безопасности в Go-коде.
+   - **Staticcheck**: Поиск багов и проблем производительности.
+3. **Платформы CI/CD**: GitLab CI и Google Cloud Build.
+
+---
+
+### **GitLab CI Pipelines** <a id="gitlab-ci-pipelines"></a>
 
 ```yaml
-stages: # Define the stages of the pipeline
+stages: # Определение этапов пайплайна
   - build
   - test
   - lint
@@ -183,7 +162,7 @@ build:
   stage: build
   script:
     - go build -o app .
-    - echo "Build successful!"
+    - echo "Сборка успешна!"
   artifacts:
     paths:
       - app
@@ -204,7 +183,7 @@ lint:
 deploy:
   stage: deploy
   script:
-    - echo "Deploying to production..."
+    - echo "Внедрение в продакшен..."
     - ./deploy_script.sh
   only:
     - main
