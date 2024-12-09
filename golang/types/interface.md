@@ -104,3 +104,34 @@ func main() {
 - Сравнение интерфейсов с `nil`:
   - Интерфейс считается `nil`, если **и тип, и значение равны `nil`**.
   - Если интерфейс содержит тип, но значение `nil`, он не считается `nil`.
+
+
+
+```go
+package main
+
+import "fmt"
+
+type Worker interface {
+	Do()
+}
+
+type User struct{}
+
+func (u User) Do() {
+	fmt.Println("Doing...")
+}
+
+func main() {
+	var w Worker
+	fmt.Println(w == nil)
+
+	var u = &User{}
+	fmt.Println(u == nil)
+
+	w = u
+	fmt.Println(w == nil)
+
+	w.Do()
+}
+```

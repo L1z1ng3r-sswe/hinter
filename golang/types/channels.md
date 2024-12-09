@@ -11,7 +11,8 @@
 ### 11. [Concurrent write into a slice](#concurrent-use-slice)
 ### 12. [Zero value](#zero-value)
 ### 13. [Merge with context](#merge-with-context)
-### 14. [Закрытие каналов в Go](#why-close-channels-in-go)
+### 14. [Fetching with context cancel](#fetch-witch-context)
+### 15. [Закрытие каналов в Go](#why-close-channels-in-go)
 
 ---
 
@@ -49,12 +50,12 @@ func merge(chans ...<-chan int) <-chan int {
 ### Функция throttle <a id="throttle-function"></a>
 
 ```go
-func throttle(fn func(), ms time.Duration) func() {
-	now := time.Now()
+func throtle(fn func(), ms time.Duration) func() {
+	var lastExecution time.Time
 
 	return func() {
-		if time.Now().Sub(now) >= ms { // or time.Since
-			now = time.Now()
+		if time.Since(lastExecution) >= ms {
+			lastExecution = time.Now()
 			fn()
 		}
 	}
@@ -424,7 +425,7 @@ func main() {
 // exit status 2
 ```
 
-###  <a id="merge-with-context"></a>
+### Merge With Context <a id="merge-with-context"></a>
 
 ```go
 func merge(ctx context.Context, chs ...<-chan int) <-chan int {
@@ -461,6 +462,55 @@ func merge(ctx context.Context, chs ...<-chan int) <-chan int {
 }
 ```
 
+### Fetching with context cancel <a id="fetch-witch-context"></a>
+
+```go
+const (
+	gosLimit = 100
+)
+
+func main() {
+	urls := []string{
+		"https://www.google.com",
+	}
+
+	var wg sync.WaitGroup
+	var ctxDone, cancel = context.WithCancel(context.Background())
+	semaphore := make(chan struct{}, gosLimit)
+
+	for _, url := range urls {
+		wg.Add(1)
+
+		go func(url string) {
+			defer wg.Done()
+			semaphore <- struct{}{}
+			defer func() { <-semaphore }()
+
+			select {
+			case <-ctxDone.Done():
+				return
+			default:
+				err := fetch(url)
+
+				if err != nil {
+					fmt.Println("Error fetching: ", err.Error())
+					cancel()
+				} else {
+					fmt.Println("Fetched: ", url)
+				}
+			}
+		}(url)
+	}
+
+	wg.Wait()
+	fmt.Println("Program finished")
+}
+
+func fetch(url string) error {
+	_, err := http.Get(url)
+	return err
+}
+```
 
 ### Закрытие каналов в Go <a id="why-close-channels-in-go"></a>
 

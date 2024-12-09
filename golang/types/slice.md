@@ -101,25 +101,26 @@ func iterate(slice []int) {
 ### Функция customAppend <a id="custom-append-function"></a>
 
 ```go
-func customAppend(slice []int, elems ...int) []int {
-	oldLen := len(slice)
-	newLen := len(slice) + len(elems)
+func customAppend[T any](slice []T, newVals ...T) []T {
+	newSlice := slice
+	newLength := len(slice) + len(newVals)
 
-	if newLen > cap(slice) {
-		newCap := newLen
+	if newLength > cap(slice) {
+		newCap := newLength
 
-		if newCap < 2*len(slice) {
-			newCap = 2 * len(slice)
+		if newCap < cap(slice)*2 {
+			newCap = cap(slice) * 2
 		}
 
-		newSlice := make([]int, newLen, newCap)
+		newSlice = make([]T, len(slice), newCap)
+
 		copy(newSlice, slice)
-		slice = newSlice
 	}
 
-	slice = slice[:newLen]
-	copy(slice[oldLen:], elems)
-	return slice
+	newSlice = newSlice[:newLength]
+	copy(newSlice[len(slice):], newVals)
+
+	return newSlice
 }
 ```
 

@@ -36,8 +36,7 @@ Email System: Send a verification email.
 Logs/Analytics System: Record user creation activity for monitoring and analytics.
 Compensation: Handle rollbacks if any step fails (e.g., delete user and clean up resources).
 
-
-```package workflows
+```go
 import (
 	"go.temporal.io/sdk/workflow"
 )
