@@ -6,7 +6,8 @@
 6. [Функция customAppend](#custom-append-function)  
 7. [Функция isPalindrome](#is-palindrome-function)  
 8. [Функция reverse](#reverse-function)
-9. [Method copy](#copy-method)
+9. [Append in sorted order](#append-in-sorted-order)
+10. [Method copy](#copy-method)
 
 ---
 
@@ -176,5 +177,21 @@ func add(sl []int) {
 	sl[1] = 1
 	sl = append(sl, []int{1, 2, 3}...)
 }
+```
 
+### Append in sorted order <a id="append-in-sorted-order"></a>
+
+```go
+i := len(arr) - 1
+
+key := 3
+arr = arr[:len(arr)+1]
+
+for i >= 0 && key < arr[i] {
+	arr[i+1] = arr[i]
+	i--
+}
+i++
+
+arr[i] = key
 ```
