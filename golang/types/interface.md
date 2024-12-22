@@ -135,3 +135,15 @@ func main() {
 	w.Do()
 }
 ```
+
+```go
+func main() {
+	err := Errorer()
+
+	fmt.Println(errors.Is(err, errors.New("Jalap"))) // false because different instances (structures)
+}
+
+func Errorer() error {
+	return errors.New("Jalap")
+}
+```
